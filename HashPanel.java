@@ -9,15 +9,10 @@ public class HashPanel extends JPanel {
     private JPanel controlPanel;
     private HashingPanel hashingPanel = new HashingPanel();
     private DetailsPanel detailsPanel = new DetailsPanel();
-    //private Random rand = new Random();
-    private JButton []buttons = {new JButton("Insert Element"),
-                                 new JButton("Print table")};
-    private JRadioButton []radioButtons = {new JRadioButton("Linear Probing"),
-                                           new JRadioButton("Double Hashing"),
-                                           new JRadioButton("Quadratic Probing")};
+    private ButtonGroup hashingType = new ButtonGroup();
     private int eleIndex = 0;
 
-
+    
     /**
      * Default constructor for HashPanel, creates an instance of HashTable,
      *
@@ -25,32 +20,12 @@ public class HashPanel extends JPanel {
      */
     public HashPanel() {
         h = new HashTable();
-        controlPanel = new JPanel();
-        controlPanel.setPreferredSize(new Dimension(200, 500));
-        controlPanel.setBackground(Color.blue);
-        ButtonListener listner = new ButtonListener();
-        for (JButton b: buttons) {
-            b.addActionListener(listner);
-            controlPanel.add(b);
-        }
-        
-        ButtonGroup hashingGroup = new ButtonGroup();
-        for (JRadioButton rb: radioButtons) {
-            hashingGroup.add(rb);
-            rb.addActionListener(listner);
-            controlPanel.add(rb);
-            if (rb.getText() == "Linear Probing") {
-                rb.setSelected(true);
-            }
-        }
-        
         add(hashingPanel);
 	add(detailsPanel);
-        add(controlPanel);
     }
     
     public static void main(String [] args){
-        JFrame frame = new JFrame();
+        JFrame frame = new JFrame("HashTable Visualization");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().add(new HashPanel());
         frame.pack();
@@ -90,13 +65,15 @@ public class HashPanel extends JPanel {
     }
 
     
-    private class HashingPanel extends JPanel {
-        private int xDimension = 500;
-        private int yDimension = 300; 
+    private class HashingPanel extends JPanel { 
         int dimension = 500;
         int buffer = 40;
         int eleBuffer = 60;
         int lineLength = 100;
+
+        public HashingPanel(){
+            setPreferredSize(new Dimension(dimension, dimension));
+        }
 
         
         public void paintComponent(Graphics g) {
@@ -115,6 +92,7 @@ public class HashPanel extends JPanel {
         }
 
         public void drawTable(Graphics g) {
+            System.out.println("Drawing Table");
             g.drawLine(dimension/2-lineLength, buffer,
                        dimension/2+lineLength, buffer);
             
@@ -130,13 +108,9 @@ public class HashPanel extends JPanel {
             g.drawLine(dimension/2+lineLength, buffer, dimension/2+lineLength,
                        buffer + (40*h.size));
         }
-
-        
-        public HashingPanel(){
-            setPreferredSize(new Dimension(dimension, dimension));
-        }
     }
 
+    
     /*
      * Can just put some details about what is going on e.g. the equation of
      * the current hashing function,
@@ -145,21 +119,44 @@ public class HashPanel extends JPanel {
      **/
     private class DetailsPanel extends JPanel {
 
+        ButtonListener listener = new ButtonListener();
+        JButton []buttons = {new JButton("Insert Element"),
+                             new JButton("Print table")};
+        JRadioButton linearH = new JRadioButton("Linear Probing");
+        JRadioButton doubleH = new  JRadioButton("Double Hashing");
+        JRadioButton quadraticH =  new JRadioButton("Quadratic Probing");
+
+        
+	public DetailsPanel() {
+	    setPreferredSize(new Dimension(200, 500));
+	}
+
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
             updatePanel(g);
         }
-
-        public void updatePanel(Graphics g) {
-            g.drawString("Current Hashing Function:", 10, 30);
-            g.drawString(h.getHashingEquation(), 10, 60);
-            g.drawString("Inserting:", 10, 90);
-            g.drawString(Integer.toString(h.elements[eleIndex]), 10, 120);
-        }
         
-	public DetailsPanel() {
-	    setPreferredSize(new Dimension(200, 500));
-	    setBackground(Color.green);
-	}
+        public void updatePanel(Graphics g) {
+            System.out.println("Updating");
+            g.drawString("Current Hashing Function:", 10, getHeight() - 120);
+            g.drawString(h.getHashingEquation(), 10, getHeight() - 90);
+            g.drawString("Inserting:", 10, getHeight() - 60);
+            g.drawString(Integer.toString(h.elements[eleIndex]),
+                         10, getHeight() - 30);
+
+            /*
+            for (JButton b: buttons) {
+                b.addActionListener(listener);
+                add(b);
+            }
+            */
+
+            linearH.addActionListener(listener);
+            hashingType.add(linearH);
+            doubleH.addActionListener(listener);
+            hashingType.add(doubleH);
+            quadraticH.addActionListener(listener);
+            hashingType.add(quadraticH);
+        }
     }
 }
