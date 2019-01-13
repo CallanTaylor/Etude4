@@ -17,14 +17,19 @@ public class HashPanel extends JPanel {
                                            new JRadioButton("Quadratic Probing")};
     private int eleIndex = 0;
 
-    
+
+    /**
+     * Default constructor for HashPanel, creates an instance of HashTable,
+     *
+     *
+     */
     public HashPanel() {
         h = new HashTable();
         controlPanel = new JPanel();
         controlPanel.setPreferredSize(new Dimension(200, 500));
         controlPanel.setBackground(Color.blue);
         ButtonListener listner = new ButtonListener();
-        for(JButton b: buttons) {
+        for (JButton b: buttons) {
             b.addActionListener(listner);
             controlPanel.add(b);
         }

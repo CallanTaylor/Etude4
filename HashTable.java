@@ -16,18 +16,18 @@ public class HashTable {
     
     public HashTable(){
         type = HashingType.LinearProbing; // default linearprobing
-        for(int i = 0; i < elements.length; i++){
+        for(int i = 0; i < elements.length; i++) {
             elements[i] = rand.nextInt(100)+1;
         }
     }
 
     
     public String getHashingEquation(){
-        if(this.type == HashingType.LinearProbing){
+        if (this.type == HashingType.LinearProbing) {
             return "H(k,i) = (h(k) + i) % m";
-        }else if(this.type == HashingType.DoubleHashing){
+        } else if (this.type == HashingType.DoubleHashing) {
             return "H(k,i) = (h(k) + i * g(k)) % m";
-        }else{
+        } else {
             return "H(k,i) = (h(k) + i^2) % m";
         }
     }
@@ -66,7 +66,7 @@ public class HashTable {
         }
         
         index = index % size;
-        while(keys[index] != 0){
+        while(keys[index] != 0) {
             collisions++;
             if (type == HashingType.LinearProbing) {
                 index++;
@@ -87,7 +87,7 @@ public class HashTable {
     }
 
     
-    public void clear(){
+    public void clear() {
         for(int i = 0; i < size; i++){
             keys[i] = 0;
         }
@@ -95,8 +95,8 @@ public class HashTable {
     }
 
     
-    public void print(){
-        for(int i = 0; i < size; i++){
+    public void print() {
+        for(int i = 0; i < size; i++) {
             System.out.println(keys[i]);
         }
         System.out.println("-------------------------------");
