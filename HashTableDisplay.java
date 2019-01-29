@@ -18,7 +18,7 @@ public class HashTableDisplay extends JPanel {
     private static int globalWidth;
 
     private static int currentTableSize = 7;
-    private static int maxTableSize =  17;
+    private static int maxTableSize = 19;
     private int currentActiveKey;
     private int positionOfActiveKey;
     private ArrayList<Integer> intermediateResults;
@@ -100,7 +100,7 @@ public class HashTableDisplay extends JPanel {
 
                 if (buttonPressed.getText().equals("Insert")) {
                     newKey = userPanel.getNewKey();
-                    if (newKey != 0) {
+                    if (newKey > 0) {
                         intermediateResults = h.insert(newKey);
                         currentActiveKey = newKey;
                         currentAction = 1;
@@ -154,10 +154,10 @@ public class HashTableDisplay extends JPanel {
         private JTextField deleteNumberTF;
         private JTextField searchNumberTF;
         private JRadioButton linearProbingRB;
-        private JLabel intro;
-        private JLabel hashing;
         private JLabel displayActions;
         private int panelWidth = 235;
+        private int panelHeight = 400;
+        private JLabel errorDisplay;
 
         ButtonListener listener = new ButtonListener();
 
@@ -177,27 +177,42 @@ public class HashTableDisplay extends JPanel {
             deleteNumberTF = new JTextField(5);
             searchNumberTF = new JTextField(5);
             insertNumberTF = new JTextField(5);
-            intro = new JLabel("<html> Hash Tables are simply a way of <br/> "
-                    + " storing items such as integers so that <br/>" + " you dont have to spend alot of time<br/>"
-                    + " looking for something. They do this by<br/>" + " finding a position for each item based <br/>"
-                    + " on the value of the item itself.<html>");
-            hashing = new JLabel("<html> Whenever you need to insert, delete, <br> "
-            + " or search for, an item, the item <br> "
-            + " (in this case an integer) is modified <br> "
-            + " by some function called the hashing <br> "
-            + " function which gives us a position in <br>"
-            + " the table. If there is allready an item <br>"
-            + " at that position we either increment the <br>"
-            + " position by 1 (Linear Hashing) or add the <br>"
-            + " value of a second hashing function. <br>"
-            + " (double Hashing) <br>");
-            displayActions = new JLabel();
+
             insertB.addActionListener(listener);
             searchB.addActionListener(listener);
             tableSizeTF = new JTextField(5);
             JButton createTableButton = new JButton("New Table");
             createTableButton.addActionListener(listener);
-            JPanel buttonPanel = new JPanel();
+
+            JLabel newTableLabel = new JLabel(
+                    "<html>To create a new table enter a positive<br> integer between 1 and 19.<html>");
+            JPanel newTablePanel = new JPanel();
+            newTablePanel.setLayout(new GridLayout(0, 2, 5, 0));
+            newTablePanel.setBackground(Color.WHITE);
+            newTablePanel.add(createTableButton);
+            newTablePanel.add(tableSizeTF);
+
+            JLabel newKeyLabel = new JLabel("Enter a positive integer to insert.");
+            JPanel newKeyPanel = new JPanel();
+            newKeyPanel.setLayout(new GridLayout(0, 2, 5, 0));
+            newKeyPanel.setBackground(Color.WHITE);
+            newKeyPanel.add(insertB);
+            newKeyPanel.add(insertNumberTF);
+
+            JLabel deleteKeyLabel = new JLabel("Enter a positive integer to delete.");
+            JPanel deleteKeyPanel = new JPanel();
+            deleteKeyPanel.setLayout(new GridLayout(0, 2, 5, 0));
+            deleteKeyPanel.setBackground(Color.WHITE);
+            deleteKeyPanel.add(deleteB);
+            deleteKeyPanel.add(deleteNumberTF);
+
+            JLabel searchKeyLabel = new JLabel("Enter a positive integer to search for.");
+            JPanel searchKeyPanel = new JPanel();
+            searchKeyPanel.setLayout(new GridLayout(0, 2, 5, 0));
+            searchKeyPanel.setBackground(Color.WHITE);
+            searchKeyPanel.add(searchB);
+            searchKeyPanel.add(searchNumberTF);
+
             linearProbingRB = new JRadioButton("Linear Probing");
             linearProbingRB.doClick();
             linearProbingRB.addActionListener(listener);
@@ -206,25 +221,39 @@ public class HashTableDisplay extends JPanel {
             ButtonGroup hashingType = new ButtonGroup();
             hashingType.add(linearProbingRB);
             hashingType.add(doubleHashingRB);
+            JPanel buttonPanel = new JPanel();
             buttonPanel.setLayout(new GridLayout(0, 2, 5, 10));
             buttonPanel.setBackground(Color.WHITE);
-            buttonPanel.add(createTableButton);
-            buttonPanel.add(tableSizeTF);
-            buttonPanel.add(insertB);
-            buttonPanel.add(insertNumberTF);
-            buttonPanel.add(deleteB);
-            buttonPanel.add(deleteNumberTF);
-            buttonPanel.add(searchB);
-            buttonPanel.add(searchNumberTF);
             buttonPanel.add(linearProbingRB);
             buttonPanel.add(doubleHashingRB);
-            setLayout(new GridLayout(0, 1, 2, 20));
-            add(buttonPanel);
-            intro.setForeground(Color.BLACK);
-            hashing.setForeground(Color.BLACK);
+
+            JPanel inputs = new JPanel();
+            inputs.setLayout(new GridLayout(0, 1, 2, 0));
+            inputs.add(newTableLabel);
+            inputs.add(newTablePanel);
+            inputs.add(newKeyLabel);
+            inputs.add(newKeyPanel);
+            inputs.add(deleteKeyLabel);
+            inputs.add(deleteKeyPanel);
+            inputs.add(searchKeyLabel);
+            inputs.add(searchKeyPanel);
+            inputs.add(buttonPanel);
+            setLayout(new GridLayout(0, 1, 0, 0));
+            add(inputs);
+
+            JLabel intro = new JLabel("<html> Hash Tables are simply a way of <br/> "
+                    + " storing items such as integers so that <br/>" + " you dont have to spend alot of time<br/>"
+                    + " looking for something. They do this by<br/>" + " finding a position for each item based <br/>"
+                    + " on the value of the item itself. <br>" + " Whenever you need to insert, delete, <br> "
+                    + " or search for, an item, the item <br> " + " (in this case an integer) is modified <br> "
+                    + " by some function called the hashing <br> " + " function which gives us a position in <br>"
+                    + " the table. If there is allready an item <br>" + " at that position we either increment the <br>"
+                    + " position by 1 (Linear Hashing) or add the <br>" + " value of a second hashing function. <br>"
+                    + " (double Hashing) <br>");
             add(intro);
-            add(hashing);
-            add(displayActions);
+
+            errorDisplay = new JLabel();
+            add(errorDisplay);
         }
 
         /**
@@ -241,9 +270,13 @@ public class HashTableDisplay extends JPanel {
             } catch (NumberFormatException e) {
                 tableSizeTF.setText("");
             }
-            if (size == 0) {
-                System.err.println("Error: table size must be > 0");
+            if (size < 1 || size > maxTableSize) {
+                userPanel.errorDisplay.setText("Invalid table size");
+                userPanel.repaint();
+                size = 0;
             }
+            userPanel.errorDisplay.setText("New table of size: " + size);
+            userPanel.repaint();
             return size;
         }
 
@@ -272,6 +305,8 @@ public class HashTableDisplay extends JPanel {
             try {
                 deleteKey = Integer.parseInt(deleteNumberTF.getText());
             } catch (NumberFormatException e) {
+                userPanel.errorDisplay.setText("Invalid delete value");
+                userPanel.repaint();
             }
             deleteNumberTF.setText("");
             return deleteKey;
@@ -287,7 +322,11 @@ public class HashTableDisplay extends JPanel {
             try {
                 searchKey = Integer.parseInt(searchNumberTF.getText());
             } catch (NumberFormatException e) {
+                userPanel.errorDisplay.setText("Invalid search value");
+                userPanel.repaint();
             }
+            userPanel.errorDisplay.setText("Searching for: " + searchKey);
+            userPanel.repaint();
             searchNumberTF.setText("");
             return searchKey;
         }

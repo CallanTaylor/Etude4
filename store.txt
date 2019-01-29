@@ -1,0 +1,14 @@
+            intro = new JLabel("<html> Hash Tables are simply a way of <br/> "
+                    + " storing items such as integers so that <br/>" + " you dont have to spend alot of time<br/>"
+                    + " looking for something. They do this by<br/>" + " finding a position for each item based <br/>"
+                    + " on the value of the item itself.<html>");
+            hashing = new JLabel("<html> Whenever you need to insert, delete, <br> "
+            + " or search for, an item, the item <br> "
+            + " (in this case an integer) is modified <br> "
+            + " by some function called the hashing <br> "
+            + " function which gives us a position in <br>"
+            + " the table. If there is allready an item <br>"
+            + " at that position we either increment the <br>"
+            + " position by 1 (Linear Hashing) or add the <br>"
+            + " value of a second hashing function. <br>"
+            + " (double Hashing) <br>");
